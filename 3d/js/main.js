@@ -9,24 +9,24 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { UNITS, FLOORS, STATUS, SITE, INTERIORS, SUN, fmtGBP, sqm, FLOOR_H, IS_PH, START_AREA, IS_OSL, PLANF } from './site.js?v=1793387171';
-import { buildPrintHouse, buildSeatonSign, buildSeatonHouse } from './printhouse.js?v=1793387171';
-import { buildOSL } from './oslbuild.js?v=1793387171';
-import { buildOSLFitout } from './oslfit.js?v=1793387171';
-import { makeMaterials, CUT, setAniso, tex } from './materials.js?v=1793387171';
-import { buildCharterHouse, buildFloorPlates } from './building.js?v=1793387171';
-import { buildContext, buildCourtyard, groundY } from './context.js?v=1793387171';
-import { setTerrain, setMid, buildWorld, obb, groundAt, townUniforms } from './world.js?v=1793387171';
-import { buildFar, hazeUniforms } from './far.js?v=1793387171';
-import { Forest, windUniforms } from './trees.js?v=1793387171';
-import { Interior } from './interior.js?v=1793387171';
-import { buildFurniture, LAYOUTS, furnitureMaterials } from './furniture.js?v=1793387171';
-import { buildPHFitout } from './phfit.js?v=1793387171';
-import { walkMaterials, buildApartment, Walker } from './walk.js?v=1793387171';
-import { landmarkMaterials, buildStMarys, buildMarketHallOSM } from './landmarks.js?v=1793387171';
-import { createTour } from './tour.js?v=1793387171';
-import { buildCrowd } from './crowd.js?v=1793387171';
-import { pitch as chPitch, phPitch, PICKS as CH_PICKS, PH_PICKS, PROOF, RESERVE, CHARLIE, AREA_CARDS as ALL_CARDS, REGEN, AREA_HEADLINE, rentFor, oslPitch, OSL_PICKS, OSL_PROOF } from './sales.js?v=1793387171';
+import { UNITS, FLOORS, STATUS, SITE, INTERIORS, SUN, fmtGBP, sqm, FLOOR_H, IS_PH, START_AREA, IS_OSL, PLANF } from './site.js?v=1793387329';
+import { buildPrintHouse, buildSeatonSign, buildSeatonHouse } from './printhouse.js?v=1793387329';
+import { buildOSL } from './oslbuild.js?v=1793387329';
+import { buildOSLFitout } from './oslfit.js?v=1793387329';
+import { makeMaterials, CUT, setAniso, tex } from './materials.js?v=1793387329';
+import { buildCharterHouse, buildFloorPlates } from './building.js?v=1793387329';
+import { buildContext, buildCourtyard, groundY } from './context.js?v=1793387329';
+import { setTerrain, setMid, buildWorld, obb, groundAt, townUniforms } from './world.js?v=1793387329';
+import { buildFar, hazeUniforms } from './far.js?v=1793387329';
+import { Forest, windUniforms } from './trees.js?v=1793387329';
+import { Interior } from './interior.js?v=1793387329';
+import { buildFurniture, LAYOUTS, furnitureMaterials } from './furniture.js?v=1793387329';
+import { buildPHFitout } from './phfit.js?v=1793387329';
+import { walkMaterials, buildApartment, Walker } from './walk.js?v=1793387329';
+import { landmarkMaterials, buildStMarys, buildMarketHallOSM } from './landmarks.js?v=1793387329';
+import { createTour } from './tour.js?v=1793387329';
+import { buildCrowd } from './crowd.js?v=1793387329';
+import { pitch as chPitch, phPitch, PICKS as CH_PICKS, PH_PICKS, PROOF, RESERVE, CHARLIE, AREA_CARDS as ALL_CARDS, REGEN, AREA_HEADLINE, rentFor, oslPitch, OSL_PICKS, OSL_PROOF } from './sales.js?v=1793387329';
 const pitch = IS_OSL ? oslPitch : IS_PH ? phPitch : chPitch, PICKS = IS_OSL ? OSL_PICKS : IS_PH ? PH_PICKS : CH_PICKS;
 const RK = IS_OSL ? 'osl' : IS_PH;   // which site's rents
 const PROOFS = IS_OSL ? OSL_PROOF : PROOF;
@@ -1018,8 +1018,8 @@ function renderPanel() {
       <div class="uhead"><div><span class="label">${FLOORS[u.floor].name} · ${u.beds} bedroom${u.beds > 1 ? 's' : ''}</span><h2>Plot ${u.plot}</h2></div><span class="status ${s.key}">${s.label}</span></div>
       <div class="acts uacts">
         ${NO_INSIDE ? '' : `<button class="btn brass wide" data-act="inside">${IS_PH ? 'See the interiors' : hasPano ? 'Step inside · 360°' : 'Step inside'}</button>`}
-        <button class="btn ${NO_INSIDE ? 'brass' : 'ghost'}" data-act="view">View from window</button>
-        <button class="btn ghost" data-act="door">Walk to the door</button>
+        <button class="btn ${NO_INSIDE ? 'brass' : 'ghost'}${IS_OSL ? ' wide' : ''}" data-act="view">View from window</button>
+        ${IS_OSL ? '' : '<button class="btn ghost" data-act="door">Walk to the door</button>'}
       </div>
       <div class="facts"><div><span class="label">Price</span><b class="num">${fmtGBP(u.price)}</b></div><div><span class="label">Rent</span><b class="num">${fmtGBP(rent)}<small> pcm</small></b></div><div><span class="label">Size</span><b class="num">${u.sqft}<small> sq ft</small></b></div></div>
       <div class="acts uacts"><button class="btn ghost angle" data-act="angle" data-a="0" aria-pressed="${viewAlt === 0}">${IS_OSL ? 'Street angle' : IS_PH ? 'Front angle' : 'Street-side angle'}</button><button class="btn ghost angle" data-act="angle" data-a="1" aria-pressed="${viewAlt === 1}">${IS_OSL ? 'Courtyard angle' : IS_PH ? 'Garden-side angle' : 'Other-side angle'}</button></div>
@@ -1249,7 +1249,7 @@ function buildUnitTags(f) {
     const veil = new THREE.Mesh(vg, new THREE.MeshBasicMaterial({ color: '#2b2723', transparent: true, opacity: 0, depthWrite: false, toneMapped: false, side: THREE.DoubleSide })); veil.renderOrder = 8; veil.visible = false; unitTagGroup.add(veil);
     unitTags.push({ el, plot: u.plot, p: tp, mesh, edge, veil });
   }
-  if (PLANF) { unitTagGroup.position.copy(CH.group.position); unitTagGroup.quaternion.copy(CH.group.quaternion); try { unitTagGroup.add((IS_OSL ? buildOSLFitout : buildPHFitout)(floorUnits(f), f, FH, phFurnMats ||= furnitureMaterials(BASE))); } catch (e) { console.warn('ph fit-out', e); } }
+  if (PLANF) { unitTagGroup.position.copy(CH.group.position); unitTagGroup.quaternion.copy(CH.group.quaternion); try { unitTagGroup.add((IS_OSL ? (a, b, c, d) => buildOSLFitout(a, b, c, d, CH.houseFloors) : buildPHFitout)(floorUnits(f), f, FH, phFurnMats ||= furnitureMaterials(BASE))); } catch (e) { console.warn('ph fit-out', e); } }
   else {   // the stair and lift core every front door is reached from
     const el = document.createElement('div'); el.className = 'tag core'; el.innerHTML = `<div class="b"><strong>⇅</strong><em>${f === 0 ? 'Entrance · stairs and lift' : 'Stairs and lift · walkway'}</em></div><div class="stem"></div><div class="pin"></div>`;
     $('#labels').appendChild(el); unitTags.push({ el, plot: -1, p: new THREE.Vector3(8.8, f * FH + 0.3, 8.7), mesh: null, edge: null, veil: null });
@@ -1891,7 +1891,7 @@ function buildSpots() {
       { id: 'roof', name: 'Above the roof', at: V3(10, 31, -5), look: V3(-60, 12, -14), note: 'Drag round: St Mary’s, the Market Hall, the viaduct and the hills.', glide: false },
     ];
     // photoreal path-traced 360s (rendered offline from this model; listed in assets/pano/index.json)
-    if (!NO_INSIDE) for (const p of PANO_INDEX) SPOTS.push({ id: 'pano-' + p.file, name: p.name, at: V3(...p.pos), look: V3(...p.look), pano: `pano/${p.file}.jpg?v=1793387171`, glide: false, type: p.type, plot: p.plot, room: p.room || p.name, note: p.note || 'Photoreal 360°. Drag to look round.' });
+    if (!NO_INSIDE) for (const p of PANO_INDEX) SPOTS.push({ id: 'pano-' + p.file, name: p.name, at: V3(...p.pos), look: V3(...p.look), pano: `pano/${p.file}.jpg?v=1793387329`, glide: false, type: p.type, plot: p.plot, room: p.room || p.name, note: p.note || 'Photoreal 360°. Drag to look round.' });
   }
   const LINKS = {"wellington": [], "garden": ["garden2", "walk1", "walktop"], "garden2": ["garden", "walk1"], "walk1": ["garden", "walktop"], "walktop": ["garden", "walk1"], "stjoseph": ["fletcher"], "fletcher": ["stjoseph"], "roof": [], "corner": ["park", "arch", "harvey", "smg"], "park": ["corner", "arch"], "arch": ["corner", "park"], "harvey": ["smg", "corner"], "smg": ["harvey", "corner"], "courtyard": ["walkway"], "walkway": ["courtyard"], "church": [], "market": []};   // the spots you can actually see from each spot (pins never show through walls)
   for (const sp of SPOTS) sp.links = LINKS[sp.id] || [];
@@ -2125,7 +2125,7 @@ function loop() {
   try {
     await build();
     placeLandmarks();
-    try { const j = await fetch(BASE + 'pano/index.json?v=1793387171').then(r => r.ok ? r.json() : []); PANO_INDEX = (j || []).filter(p => !!p.type === true && (IS_OSL ? p.site === 'osl' : IS_PH ? p.site === 'ph' : p.site !== 'ph' && p.site !== 'osl')); } catch (e) { PANO_INDEX = []; }
+    try { const j = await fetch(BASE + 'pano/index.json?v=1793387329').then(r => r.ok ? r.json() : []); PANO_INDEX = (j || []).filter(p => !!p.type === true && (IS_OSL ? p.site === 'osl' : IS_PH ? p.site === 'ph' : p.site !== 'ph' && p.site !== 'osl')); } catch (e) { PANO_INDEX = []; }
     buildSpots();
   } catch (e) { console.error(e); lmsg.textContent = 'Something went wrong loading the model. Please refresh.'; return; }
   applyTOD('day');
