@@ -1,0 +1,78 @@
+[
+ {
+  "site": "ch",
+  "file": "ch21_0",
+  "plot": 21,
+  "type": "1A",
+  "name": "Apt 21 \u00b7 kitchen and living",
+  "pos": [
+   19.975,
+   10.136,
+   2.385
+  ],
+  "look": [
+   22.971,
+   9.786,
+   2.221
+  ],
+  "room": "Kitchen and living",
+  "note": "Apt 21, a 1-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch21_1",
+  "plot": 21,
+  "type": "1A",
+  "name": "Apt 21 \u00b7 bedroom",
+  "pos": [
+   20.425,
+   10.136,
+   8.385
+  ],
+  "look": [
+   21.22,
+   9.786,
+   11.278
+  ],
+  "room": "Bedroom",
+  "note": "Apt 21, a 1-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch24_0",
+  "plot": 24,
+  "type": "2A",
+  "name": "Apt 24 \u00b7 living and dining",
+  "pos": [
+   3.725,
+   10.136,
+   2.725
+  ],
+  "look": [
+   5.592,
+   9.786,
+   0.377
+  ],
+  "room": "Living and dining",
+  "note": "Apt 24, a 2-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch24_1",
+  "plot": 24,
+  "type": "2A",
+  "name": "Apt 24 \u00b7 main bedroom",
+  "pos": [
+   8.625,
+   10.136,
+   3.025
+  ],
+  "look": [
+   9.317,
+   9.786,
+   0.106
+  ],
+  "room": "Main bedroom",
+  "note": "Apt 24, a 2-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ }
+]
