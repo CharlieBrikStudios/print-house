@@ -7,10 +7,10 @@
 // which is the engine's plan frame with u = s, v = -t.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { OSL_SITE, OSL_FH, OSL_UNITS, OSL_KEAST } from './osl_data.js?v=1793387329';
-import { roomBox } from './building.js?v=1793387329';
-import { roomMaterial } from './materials.js?v=1793387329';
-import { insetPoly, polyArea } from './world.js?v=1793387329';
+import { OSL_SITE, OSL_FH, OSL_UNITS, OSL_KEAST } from './osl_data.js?v=1793390055';
+import { roomBox } from './building.js?v=1793390055';
+import { roomMaterial } from './materials.js?v=1793390055';
+import { insetPoly, polyArea } from './world.js?v=1793390055';
 
 const FH = OSL_FH, NF = 3;
 const HW = 4.137, HD = 11.17;                   // house plot width and depth
@@ -126,15 +126,15 @@ export function buildOSL(M, opts = {}) {
     BAYS.forEach((s, k) => {
       if (f === 0 && (k === 2 || k === 3)) return;   // the archway takes two bays on the ground floor
       const u = unitAt(f, s, 1);
-      op.front.push({ a: s - 0.76, b: s + 0.76, y0: y + 0.55, y1: y + 2.5, plot: u ? u.plot : null, floor: f, id: 'F' + k, grid: [4, 4] });
+      op.front.push({ a: s - 0.76, b: s + 0.76, y0: y + 0.6, y1: y + 2.4, plot: u ? u.plot : null, floor: f, id: 'F' + k, grid: [4, 4] });
     });
     EBAYS.forEach((t, k) => {
       const u = unitAt(f, B1 - 1, t);
       if (f === 0 && k === 3) { op.east.push({ a: t - 0.6, b: t + 0.6, y0: y + 0.02, y1: y + 2.45, kind: 'door', plot: 'lobby', mat: 'door', head: 'band' }); return; }
-      op.east.push({ a: t - 0.76, b: t + 0.76, y0: y + 0.55, y1: y + 2.5, plot: u ? u.plot : null, floor: f, id: 'E' + k, grid: [4, 4] });
+      op.east.push({ a: t - 0.76, b: t + 0.76, y0: y + 0.6, y1: y + 2.4, plot: u ? u.plot : null, floor: f, id: 'E' + k, grid: [4, 4] });
     });
     // the 1C living rooms look west over the residents' garden
-    for (const [ta, tb] of [[12.55, 13.85], [14.45, 15.75]]) { const u = unitAt(f, WS + 1, (ta + tb) / 2); op.wingW.push({ a: ta, b: tb, y0: y + 0.55, y1: y + 2.5, plot: u ? u.plot : null, floor: f, id: 'W' + ta, grid: [3, 4] }); }
+    for (const [ta, tb] of [[12.55, 13.85], [14.45, 15.75]]) { const u = unitAt(f, WS + 1, (ta + tb) / 2); op.wingW.push({ a: ta, b: tb, y0: y + 0.6, y1: y + 2.4, plot: u ? u.plot : null, floor: f, id: 'W' + ta, grid: [3, 4] }); }
     if (f > 0) op.wingW.push({ a: 8.15, b: 9.2, y0: y + 0.02, y1: y + 2.3, kind: 'door', light: false });   // walkway into the stair core
     else op.wingW.push({ a: 9.9, b: 10.9, y0: y + 0.02, y1: y + 2.3, kind: 'door', light: false });          // courtyard door to the bikes and the stair
     // 1A front doors and bedroom windows on the walkway (rear of the front range); ground floor is the open undercroft
@@ -236,7 +236,7 @@ export function buildOSL(M, opts = {}) {
   for (let g = 0; g < 3; g++) {
     const i0 = g * 3, sa = i0 * HW, sb = (i0 + 3) * HW;
     // floor level of the group: the pavement at its middle, plus a step
-    const [mx, mz] = tw((sa + sb) / 2, -1); const dy = Math.max(0, groundAt(mx, mz) - y0 + 0.25);
+    const [mx, mz] = tw((sa + sb) / 2, -1); const dy = Math.min(0.45, Math.max(0, groundAt(mx, mz) - y0 + 0.15));   // a step at each group, kept low so one cut opens every ground floor
     const HE = 5.55, HR = 9.6, y = dy;
     houseFloors.push(dy);
     const gy = (o) => ({ ...o, y0: o.y0 + y, y1: o.y1 + y, fy: o.fy != null ? o.fy + y : undefined });
@@ -290,10 +290,11 @@ export function buildOSL(M, opts = {}) {
 
   // ---- painted name, as the launch CGIs: across the Syddall Street front, on Oldham Street, and down the corner
   const signs = [];
-  { const tH = signTexture('OLDHAM STREET LOFTS', false), tV = signTexture('OLDHAM STREET LOFTS', true);
+  { const ld = new THREE.TextureLoader(), lt = (n) => { const t = ld.load((opts.base || 'assets/') + 'tex/' + n); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+    const tH = lt('osl_sign_h.png'), tV = lt('osl_sign_v.png');
     const mk = (tex, w, h) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, transparent: true, roughness: 0.92, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, clippingPlanes: M.brick?.clippingPlanes }));
-    const a = mk(tH, 8.4, 0.62); a.position.set(55.4, 2 * FH + 0.17, -0.012); a.rotation.y = Math.PI; signs.push(a);
-    const b = mk(tH, 7.0, 0.56); b.position.set(B1 + 0.012, 2 * FH + 0.17, 8.1); b.rotation.y = Math.PI / 2; signs.push(b);
+    const a = mk(tH, 6.4, 0.66); a.position.set(55.6, 2 * FH + 0.14, -0.012); a.rotation.y = Math.PI; signs.push(a);
+    const b = mk(tH, 5.8, 0.6); b.position.set(B1 + 0.012, 2 * FH + 0.14, 8.0); b.rotation.y = Math.PI / 2; signs.push(b);
     const c = mk(tV, 0.9, 7.4); c.position.set((CH0 + B1) / 2 + 0.01, 4.55, CHT / 2 - 0.01); c.rotation.y = Math.PI - Math.atan2(CHT, B1 - CH0); signs.push(c);
     for (const m of signs) { m.renderOrder = 3; m.name = 'osl_sign'; group.add(m); }
   }
@@ -349,8 +350,8 @@ export function buildOSL(M, opts = {}) {
           for (let i = 0; i < poly.length; i++) {
             const p = poly[i], q = poly[(i + 1) % poly.length]; const dx = q[0] - p[0], dz = q[1] - p[1], L = Math.hypot(dx, dz);
             const d1 = Math.abs((s0 - p[0]) * dz - (ta - p[1]) * dx) / L, d2 = Math.abs((s1 - p[0]) * dz - (tb - p[1]) * dx) / L;
-            const r1 = ((s0 - p[0]) * dx + (ta - p[1]) * dz) / L, r2 = ((s1 - p[0]) * dx + (tb - p[1]) * dz) / L;
-            if (d1 < 0.25 && d2 < 0.25 && Math.min(r1, r2) > -0.3 && Math.max(r1, r2) < L + 0.3) return true;
+            const ms = (s0 + s1) / 2, mt = (ta + tb) / 2, r = ((ms - p[0]) * dx + (mt - p[1]) * dz) / L;
+            if (d1 < 0.25 && d2 < 0.25 && r > -0.3 && r < L + 0.3) return true;   // on the outline's line, beside this edge
           }
           return false;
         };

@@ -9,24 +9,24 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { UNITS, FLOORS, STATUS, SITE, INTERIORS, SUN, fmtGBP, sqm, FLOOR_H, IS_PH, START_AREA, IS_OSL, PLANF } from './site.js?v=1793387329';
-import { buildPrintHouse, buildSeatonSign, buildSeatonHouse } from './printhouse.js?v=1793387329';
-import { buildOSL } from './oslbuild.js?v=1793387329';
-import { buildOSLFitout } from './oslfit.js?v=1793387329';
-import { makeMaterials, CUT, setAniso, tex } from './materials.js?v=1793387329';
-import { buildCharterHouse, buildFloorPlates } from './building.js?v=1793387329';
-import { buildContext, buildCourtyard, groundY } from './context.js?v=1793387329';
-import { setTerrain, setMid, buildWorld, obb, groundAt, townUniforms } from './world.js?v=1793387329';
-import { buildFar, hazeUniforms } from './far.js?v=1793387329';
-import { Forest, windUniforms } from './trees.js?v=1793387329';
-import { Interior } from './interior.js?v=1793387329';
-import { buildFurniture, LAYOUTS, furnitureMaterials } from './furniture.js?v=1793387329';
-import { buildPHFitout } from './phfit.js?v=1793387329';
-import { walkMaterials, buildApartment, Walker } from './walk.js?v=1793387329';
-import { landmarkMaterials, buildStMarys, buildMarketHallOSM } from './landmarks.js?v=1793387329';
-import { createTour } from './tour.js?v=1793387329';
-import { buildCrowd } from './crowd.js?v=1793387329';
-import { pitch as chPitch, phPitch, PICKS as CH_PICKS, PH_PICKS, PROOF, RESERVE, CHARLIE, AREA_CARDS as ALL_CARDS, REGEN, AREA_HEADLINE, rentFor, oslPitch, OSL_PICKS, OSL_PROOF } from './sales.js?v=1793387329';
+import { UNITS, FLOORS, STATUS, SITE, INTERIORS, SUN, fmtGBP, sqm, FLOOR_H, IS_PH, START_AREA, IS_OSL, PLANF } from './site.js?v=1793390055';
+import { buildPrintHouse, buildSeatonSign, buildSeatonHouse } from './printhouse.js?v=1793390055';
+import { buildOSL } from './oslbuild.js?v=1793390055';
+import { buildOSLFitout } from './oslfit.js?v=1793390055';
+import { makeMaterials, CUT, setAniso, tex } from './materials.js?v=1793390055';
+import { buildCharterHouse, buildFloorPlates } from './building.js?v=1793390055';
+import { buildContext, buildCourtyard, groundY } from './context.js?v=1793390055';
+import { setTerrain, setMid, buildWorld, obb, groundAt, townUniforms } from './world.js?v=1793390055';
+import { buildFar, hazeUniforms } from './far.js?v=1793390055';
+import { Forest, windUniforms } from './trees.js?v=1793390055';
+import { Interior } from './interior.js?v=1793390055';
+import { buildFurniture, LAYOUTS, furnitureMaterials } from './furniture.js?v=1793390055';
+import { buildPHFitout } from './phfit.js?v=1793390055';
+import { walkMaterials, buildApartment, Walker } from './walk.js?v=1793390055';
+import { landmarkMaterials, buildStMarys, buildMarketHallOSM } from './landmarks.js?v=1793390055';
+import { createTour } from './tour.js?v=1793390055';
+import { buildCrowd } from './crowd.js?v=1793390055';
+import { pitch as chPitch, phPitch, PICKS as CH_PICKS, PH_PICKS, PROOF, RESERVE, CHARLIE, AREA_CARDS as ALL_CARDS, REGEN, AREA_HEADLINE, rentFor, oslPitch, OSL_PICKS, OSL_PROOF } from './sales.js?v=1793390055';
 const pitch = IS_OSL ? oslPitch : IS_PH ? phPitch : chPitch, PICKS = IS_OSL ? OSL_PICKS : IS_PH ? PH_PICKS : CH_PICKS;
 const RK = IS_OSL ? 'osl' : IS_PH;   // which site's rents
 const PROOFS = IS_OSL ? OSL_PROOF : PROOF;
@@ -91,7 +91,7 @@ if (IS_PH) {
 if (IS_OSL) {
   document.querySelectorAll('.brand img, .lcard img').forEach(i => { i.src = BASE + 'brand_osl.png'; i.alt = 'Oldham Street Lofts'; });
   $('.brand .addr').textContent = 'Syddall Street · Hyde · SK14';
-  $('#btn-tour').hidden = true; $('#btn-build').hidden = true; $('#btn-360').hidden = true;
+  $('#btn-tour').hidden = true; $('#btn-build').hidden = true; $('#btn-360').hidden = true; $('#btn-area').hidden = true;
   const vb = { front: 'The corner', rear: 'The courtyard', street: 'Syddall Street', above: 'From above' };
   document.querySelectorAll('#views [data-view]').forEach(b => b.textContent = vb[b.dataset.view]);
   $('#btn-clay').title = 'Turn every other building into a plain white architectural model so Oldham Street Lofts stands out';
@@ -100,9 +100,9 @@ if (START_AREA) {
   document.querySelectorAll('.brand img, .lcard img').forEach(i => { i.src = BASE + 'brand_brik.png'; i.alt = 'Brik Studios'; });
   $('.brand .addr').textContent = 'Stockport Underbanks · our sites and the regeneration';
 }
-document.querySelectorAll('#btn-list .lg').forEach(e => e.textContent = `All ${UNITS.length} apartments`);
+document.querySelectorAll('#btn-list .lg').forEach(e => e.textContent = `All ${UNITS.length} ${IS_OSL ? 'homes' : 'apartments'}`);
 document.querySelectorAll('#btn-list .sm').forEach(e => e.textContent = `All ${UNITS.length}`);
-$('#list h2').textContent = `All ${UNITS.length} apartments`;
+$('#list h2').textContent = `All ${UNITS.length} ${IS_OSL ? 'homes' : 'apartments'}`;
 $('#gallery h2').textContent = SITE.name;
 const msgs = ['Laying the brickwork…', `Glazing ${UNITS.length} apartments…`, IS_OSL ? 'Laying the setts on Syddall Street…' : IS_PH ? 'Planting the residents’ garden…' : 'Planting the trees on Churchgate…', 'Checking live availability…', 'Lighting the rooms…'];
 let mi = 0; const msgTimer = setInterval(() => { lmsg.textContent = msgs[++mi % msgs.length]; }, 1800);
@@ -365,7 +365,7 @@ async function buildOSLScene() {
   HERO.pos.copy(CH.local(83, 24, 22)); HERO.tgt.copy(CH.local(50, 3.5, -7));
   VIEWS.front = { pos: HERO.pos.clone(), tgt: HERO.tgt.clone() };
   VIEWS.rear = { pos: CH.local(30, 20, -44), tgt: CH.local(47, 4, -9) };
-  VIEWS.street = { pos: CH.local(-14, 9, 14), tgt: CH.local(30, 4, -4) };
+  VIEWS.street = { pos: CH.local(-3, 10, 5.5), tgt: CH.local(38, 3.5, -3) };   // over Syddall Street from Henry Street, the terrace stepping down to the block
   VIEWS.above = { pos: CH.local(36, 82, 30), tgt: CH.local(34, 0, -8) };
   const c = CH.local(32, 0, -8); CLAMP.x0 = c.x - 70; CLAMP.x1 = c.x + 70; CLAMP.z0 = c.z - 70; CLAMP.z1 = c.z + 70; CLAMP.y1 = SY() + 30;
 }
@@ -415,7 +415,7 @@ function applyTOD(name) {
   if (festoonMesh) { festoonMesh.material.color.set(P.lamps > 0.2 ? '#ffd59a' : '#5e5850'); festoonMesh.material.color.multiplyScalar(P.lamps > 0.2 ? 1 + P.lamps * 3 : 1); }
   if (M.bulb) M.bulb.color.set(P.lamps > 0.2 ? '#ffe2b0' : '#cfc8bb').multiplyScalar(P.lamps > 0.2 ? 2.5 : 1);
   townUniforms.uLit.value = P.lamps > 0.5 ? 1 : P.lamps > 0.05 ? 0.35 : 0;
-  M.ctxLit.emissiveIntensity = 0.02 + P.lamps * 1.8;
+  if (M.ctxLit) M.ctxLit.emissiveIntensity = 0.02 + P.lamps * 1.8;
   roomBase = P.rooms;
   if (S.mode === 'walk' || S.mode === 'entering') aptLights.forEach(l => l.intensity = (l.userData.I || 0) * lampScale());
   if (furniture && furniture.materials.shade) furniture.materials.shade.emissiveIntensity = P.lamps > 0.5 ? 2.4 : P.lamps > 0.05 ? 0.9 : 0.35;
@@ -510,6 +510,7 @@ function stepFlight(dt) {
 
 // section plane (floor cut-away)
 let cutTarget = 999;
+const cutY = (f) => SY() + f * FH + 1.32 + (IS_OSL && f === 0 ? Math.max(...CH.houseFloors) : 0);   // Oldham Street: clear the townhouses' raised ground floors too
 function setCut(y) { cutTarget = y; if (CUT.constant > 500 && y < 500) CUT.constant = 16; }
 
 // ------------------------------------------------------------------ views
@@ -591,7 +592,7 @@ $('#btn-area').onclick = () => toggleArea();
 
 function floorView(f) {
   const y = f * FH;
-  if (IS_OSL) return f === 0 ? { pos: CH.local(46, y + 36, 24), tgt: CH.local(31, y + 0.5, -7) } : { pos: CH.local(60, y + 25, 15), tgt: CH.local(50, y + 0.5, -7.5) };
+  if (IS_OSL) return f === 0 ? { pos: CH.local(30, y + 54, 44), tgt: CH.local(27, y + 0.5, -7.5) } : { pos: CH.local(60, y + 25, 15), tgt: CH.local(50, y + 0.5, -7.5) };
   if (IS_PH) return { pos: CH.local(-12, y + 27, -17), tgt: CH.local(12, y + 0.5, 9) };
   return { pos: new THREE.Vector3(-17, y + 25, -21), tgt: new THREE.Vector3(10.5, y + 0.5, 9.5) };
 }
@@ -660,14 +661,14 @@ function toExplore(fly = true) {
 function toFloor(f, fly = true) {
   dropOverlays();
   S.mode = 'floor'; S.floor = f; S.plot = null; gtaoTried = false;
-  setCut(SY() + f * FH + 1.32); showPlates(f); buildUnitTags(f);
+  setCut(cutY(f)); showPlates(f); buildUnitTags(f);
   if (fly) { const v = floorView(f); flyTo(v.pos, v.tgt, 1.7); }
   renderPanel(); setHash('floor-' + (f === 0 ? 'g' : f));
 }
 function toUnit(plot, fly = true) {
   const u = unitByPlot.get(plot); if (!u) return;
   dropOverlays();
-  if (S.floor !== u.floor) { S.floor = u.floor; setCut(SY() + u.floor * FH + 1.32); showPlates(u.floor); buildUnitTags(u.floor); }
+  if (S.floor !== u.floor) { S.floor = u.floor; setCut(cutY(u.floor)); showPlates(u.floor); buildUnitTags(u.floor); }
   S.mode = 'unit'; S.plot = plot; buildWinPins(u);
   if (!PLANF) setTimeout(() => prebuildApartment(plot), 1800);
   if (fly) { const v = unitView(u); flyTo(v.pos, v.tgt, 1.5); }
@@ -862,7 +863,7 @@ function seeView(plot, idx = 0, wo = null) {
   S.plot = plot; setCut(999); CUT.constant = 999; showPlates(null); clearUnitTags();
   if (clayOn) { clayForView = true; setClay(false); }   // the view from a window always shows the real street
   S.mode = 'view'; controls.enabled = false;
-  const eye = w.pos.clone().addScaledVector(w.normal, 0.3); eye.y = SY() + u.floor * FH + 1.5;   // at the glass, so nothing blocks the view
+  const eye = w.pos.clone().addScaledVector(w.normal, 0.3); eye.y = IS_OSL ? w.pos.y + 0.15 : SY() + u.floor * FH + 1.5;   // at the glass, so nothing blocks the view
   look.base.copy(eye); look.dir.copy(w.normal); look.yaw = look.ty = 0; look.pitch = look.tp = -0.04;
   const D = wo ? null : dirs[idx];
   if (D && D.target) { look.dir.copy(D.target).sub(eye).setY(0).normalize(); look.pitch = look.tp = -0.12; }   // looking down the street from the top floor
@@ -896,7 +897,7 @@ function closeView() {
 }
 function compassWord(n) {
   // model -> geographic bearing (true north from the OpenStreetMap fit: north = (-0.576, -0.818))
-  const N = new THREE.Vector2(-0.576, -0.818), E = new THREE.Vector2(0.818, -0.576);
+  const N = IS_OSL ? new THREE.Vector2(0, -1) : new THREE.Vector2(-0.576, -0.818), E = IS_OSL ? new THREE.Vector2(1, 0) : new THREE.Vector2(0.818, -0.576);   // Hyde's model is laid out east / south
   const v = new THREE.Vector2(n.x, n.z);
   const b = (Math.atan2(v.dot(E), v.dot(N)) * 180 / Math.PI + 360) % 360;
   return ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'][Math.round(b / 45) % 8];
@@ -984,7 +985,7 @@ function renderPanel() {
     const fu = floorUnits(f), fa = avail(fu);
     html = `<div class="pscroll">
       <div class="ph"><span class="label">${IS_OSL ? 'Private preview' : IS_PH ? 'Phase three now selling' : 'Private pre-launch'} · ${UNITS.length - allAv.length} of ${UNITS.length} already secured</span><h1>Choose your floor</h1>
-      <p>Hover over a floor and its rooms light up. Click it to open the floor plan, then pick an apartment and step inside.</p></div>
+      <p>${IS_OSL ? 'Hover over a floor and its homes light up. Click it to open the floor up, then pick an apartment or a townhouse.' : 'Hover over a floor and its rooms light up. Click it to open the floor plan, then pick an apartment and step inside.'}</p></div>
       <div class="levelbig"><span class="lv">Level</span><span class="n num" id="lvn">${floorWord(f)}</span>
         <div class="meta"><span><b>${fa.length}</b> of ${fu.length} available</span>${fa.length ? `<span>from <b>${fmtGBP(Math.min(...fa.map(u => u.price)))}</b></span>` : ''}<span>${FLOORS[f].note || FLOORS[f].name}</span></div></div>
       <div class="floors" role="list">${FLOORS.map(F => F.id).reverse().map(k => {
@@ -1195,13 +1196,13 @@ function buildBaths(f) {
 let winPins = [];
 function clearWinPins() { winPins.forEach(p => p.el.remove()); winPins = []; }
 function buildWinPins(u) {
-  clearWinPins(); if (PLANF) return;
-  CH.windows.filter(w => w.plot === u.plot).forEach((w) => {
+  clearWinPins();
+  CH.windows.filter(w => w.plot === u.plot && !(u.house && !/[gr]$/.test(w.id))).forEach((w) => {
     const el = document.createElement('button'); el.className = 'winpin'; el.setAttribute('aria-label', 'View from this window');
     el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M12 3v18M5 12h14"/></svg><span>View</span>';
     el.onclick = (e) => { e.stopPropagation(); seeView(u.plot, 0, w); };
     $('#labels').appendChild(el);
-    const p = w.pos.clone().addScaledVector(w.normal, -0.25); p.y = SY() + u.floor * FH + 1.0;
+    const p = w.pos.clone().addScaledVector(w.normal, -0.25); p.y = PLANF ? Math.min(w.pos.y, SY() + u.floor * FH + 1.0 + (u.house ? CH.houseFloors[Math.floor((u.plot - 1) / 3)] : 0)) : SY() + u.floor * FH + 1.0;
     winPins.push({ el, p });
   });
 }
@@ -1891,7 +1892,7 @@ function buildSpots() {
       { id: 'roof', name: 'Above the roof', at: V3(10, 31, -5), look: V3(-60, 12, -14), note: 'Drag round: St Mary’s, the Market Hall, the viaduct and the hills.', glide: false },
     ];
     // photoreal path-traced 360s (rendered offline from this model; listed in assets/pano/index.json)
-    if (!NO_INSIDE) for (const p of PANO_INDEX) SPOTS.push({ id: 'pano-' + p.file, name: p.name, at: V3(...p.pos), look: V3(...p.look), pano: `pano/${p.file}.jpg?v=1793387329`, glide: false, type: p.type, plot: p.plot, room: p.room || p.name, note: p.note || 'Photoreal 360°. Drag to look round.' });
+    if (!NO_INSIDE) for (const p of PANO_INDEX) SPOTS.push({ id: 'pano-' + p.file, name: p.name, at: V3(...p.pos), look: V3(...p.look), pano: `pano/${p.file}.jpg?v=1793390055`, glide: false, type: p.type, plot: p.plot, room: p.room || p.name, note: p.note || 'Photoreal 360°. Drag to look round.' });
   }
   const LINKS = {"wellington": [], "garden": ["garden2", "walk1", "walktop"], "garden2": ["garden", "walk1"], "walk1": ["garden", "walktop"], "walktop": ["garden", "walk1"], "stjoseph": ["fletcher"], "fletcher": ["stjoseph"], "roof": [], "corner": ["park", "arch", "harvey", "smg"], "park": ["corner", "arch"], "arch": ["corner", "park"], "harvey": ["smg", "corner"], "smg": ["harvey", "corner"], "courtyard": ["walkway"], "walkway": ["courtyard"], "church": [], "market": []};   // the spots you can actually see from each spot (pins never show through walls)
   for (const sp of SPOTS) sp.links = LINKS[sp.id] || [];
@@ -2125,7 +2126,7 @@ function loop() {
   try {
     await build();
     placeLandmarks();
-    try { const j = await fetch(BASE + 'pano/index.json?v=1793387329').then(r => r.ok ? r.json() : []); PANO_INDEX = (j || []).filter(p => !!p.type === true && (IS_OSL ? p.site === 'osl' : IS_PH ? p.site === 'ph' : p.site !== 'ph' && p.site !== 'osl')); } catch (e) { PANO_INDEX = []; }
+    try { const j = await fetch(BASE + 'pano/index.json?v=1793390055').then(r => r.ok ? r.json() : []); PANO_INDEX = (j || []).filter(p => !!p.type === true && (IS_OSL ? p.site === 'osl' : IS_PH ? p.site === 'ph' : p.site !== 'ph' && p.site !== 'osl')); } catch (e) { PANO_INDEX = []; }
     buildSpots();
   } catch (e) { console.error(e); lmsg.textContent = 'Something went wrong loading the model. Please refresh.'; return; }
   applyTOD('day');
