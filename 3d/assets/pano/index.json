@@ -1,6 +1,44 @@
 [
  {
   "site": "ch",
+  "file": "ch1_0",
+  "plot": 1,
+  "type": "1E",
+  "name": "Apt 1 \u00b7 kitchen and living",
+  "pos": [
+   21.225,
+   1.586,
+   4.625
+  ],
+  "look": [
+   18.783,
+   1.236,
+   6.367
+  ],
+  "room": "Kitchen and living",
+  "note": "Apt 1, a 1-bed on the ground floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch1_1",
+  "plot": 1,
+  "type": "1E",
+  "name": "Apt 1 \u00b7 bedroom",
+  "pos": [
+   18.525,
+   1.586,
+   6.925
+  ],
+  "look": [
+   17.836,
+   1.236,
+   9.845
+  ],
+  "room": "Bedroom",
+  "note": "Apt 1, a 1-bed on the ground floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
   "file": "ch21_0",
   "plot": 21,
   "type": "1A",
@@ -187,6 +225,25 @@
    0.447
   ],
   "room": "Kitchen and living",
+  "note": "Apt 3, a 1-bed on the ground floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch3_1",
+  "plot": 3,
+  "type": "1D",
+  "name": "Apt 3 \u00b7 bedroom",
+  "pos": [
+   3.125,
+   1.586,
+   4.425
+  ],
+  "look": [
+   0.164,
+   1.236,
+   4.909
+  ],
+  "room": "Bedroom",
   "note": "Apt 3, a 1-bed on the ground floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
  }
 ]
