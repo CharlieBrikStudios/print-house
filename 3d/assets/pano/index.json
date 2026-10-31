@@ -74,5 +74,24 @@
   ],
   "room": "Main bedroom",
   "note": "Apt 24, a 2-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch24_2",
+  "plot": 24,
+  "type": "2A",
+  "name": "Apt 24 \u00b7 second bedroom",
+  "pos": [
+   3.425,
+   10.136,
+   4.425
+  ],
+  "look": [
+   0.459,
+   9.786,
+   4.876
+  ],
+  "room": "Second bedroom",
+  "note": "Apt 24, a 2-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
  }
 ]
