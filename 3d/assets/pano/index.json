@@ -93,5 +93,43 @@
   ],
   "room": "Second bedroom",
   "note": "Apt 24, a 2-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch26_0",
+  "plot": 26,
+  "type": "1B",
+  "name": "Apt 26 \u00b7 kitchen and living",
+  "pos": [
+   3.065,
+   10.136,
+   14.525
+  ],
+  "look": [
+   0.072,
+   9.786,
+   14.318
+  ],
+  "room": "Kitchen and living",
+  "note": "Apt 26, a 1-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
+ },
+ {
+  "site": "ch",
+  "file": "ch26_1",
+  "plot": 26,
+  "type": "1B",
+  "name": "Apt 26 \u00b7 bedroom",
+  "pos": [
+   9.065,
+   10.136,
+   14.325
+  ],
+  "look": [
+   11.843,
+   9.786,
+   15.458
+  ],
+  "room": "Bedroom",
+  "note": "Apt 26, a 1-bed on the top floor: oak herringbone, panelled walls, brass and marble. Drag to look round."
  }
 ]
