@@ -18,24 +18,46 @@
   "early_html": "<div class=\"earlynote\"><span class=\"pl\"><i></i>Phase three pre-release</span><p><b>Phases one and two sold out in 5 and 7 days.</b> Phase three is next, at the same prices. Choose yours before it launches.</p></div>",
   "awards": [
     [
+      "North West Homebuilder Awards",
+      "Winner",
       "Smaller Apartment Scheme of the Year",
-      "Winner, North West Homebuilder Awards 2024. 21 Living"
-    ],
-    [
-      "Housing Design Awards",
-      "Project Winner, Climate Innovation District. Ollier Smurthwaite"
-    ],
-    [
-      "RIBA Regional Award",
-      "and Small Project Award, Devonshire Road. Ollier Smurthwaite"
-    ],
-    [
-      "House Builder Awards",
-      "Winner, Roof Gardens. Ollier Smurthwaite"
+      "21 Living",
+      "2024"
     ],
     [
       "Manchester Society of Architects",
-      "Winner, Multiple Residential (Unbuilt), 2023. The George, Stockport. Ollier Smurthwaite"
+      "Winner",
+      "Multiple Residential (Unbuilt)",
+      "The George, Stockport",
+      "2023"
+    ],
+    [
+      "Housing Design Awards",
+      "Project Winner",
+      "",
+      "Climate Innovation District",
+      "2017"
+    ],
+    [
+      "House Builder Awards",
+      "Winner",
+      "",
+      "Roof Gardens",
+      "2016"
+    ],
+    [
+      "Manchester Society of Architects",
+      "Winner",
+      "Unbuilt Residential",
+      "City Gardens",
+      "2016"
+    ],
+    [
+      "RIBA Regional Awards",
+      "Small Project Award",
+      "",
+      "Devonshire Road",
+      "2012"
     ]
   ],
   "film": {
@@ -76,5 +98,8 @@
       "When is completion?",
       "September 2027. We'll keep you updated as the build progresses, and you'll get notice to complete well ahead of the date."
     ]
-  ]
+  ],
+  "awards_note": "",
+  "awards_bg": "arch1",
+  "awards_h": "An award-winning developer and architect."
 }
