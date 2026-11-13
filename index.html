@@ -3070,7 +3070,7 @@ html,:root{color-scheme:light only!important;background:#EEE5DF}
    Light, warm palette from V3's own tokens; one gold line accent.
    ===================================================================== */
 :root{
-  --pz_sky:url("assets/img/pz_sky.webp");--pz_viaduct:url("assets/img/pz_viaduct.webp");--pz_underbank:url("assets/img/pz_underbank.webp");
+  --pz_town:url("assets/img/pz_town.webp");--pz_brewery:url("assets/img/pz_brewery.webp");--pz_street:url("assets/img/pz_street.webp");--ph_plan_1b:url("assets/img/ph_plan_1b.webp");
   --v4warm:#F3ECE2;      /* warm off-white for the technical pages */
   --v4plan:#FCFAF6;      /* plan paper */
   --v4gold:#B08654;      /* the thin line motif */
@@ -3664,15 +3664,15 @@ const BRIEF=()=>`<section class="brief"><div class="partlab"><span class="pno">P
 /* V4 C2: full-bleed pause images between chapters, no text. Brik's own footage. */
 const PZ=(cls,v,label,pos)=>`<figure class="pause ${cls}" role="img" aria-label="${label}"><i class="pz" style="background-image:var(--${v});background-position:${pos}"></i></figure>`;
 const PAUSE={
- brief:PZ("pz-sky","pz_sky","Stockport from the air at golden hour, with the viaduct","center 62%"),
- opportunity:PZ("pz-via","pz_viaduct","The viaduct at golden hour, from the Interchange rooftop park","center 42%"),
- intel:`<figure class="pause pzduo" role="img" aria-label="Evening light on the Underbanks, and Underbank bridge"><i class="pz" style="background-image:var(--pz_underbank);background-position:center 45%"></i><i class="pz" style="background-image:var(--skbridge);background-position:center 50%"></i></figure>`};
+ brief:PZ("pz-sky","pz_town","Stockport's Old Town from the air at dusk, with St Mary's Church","65% 40%"),
+ opportunity:PZ("pz-sky","pz_brewery","Robinsons' Unicorn Brewery in the evening light","50% 50%"),
+ intel:PZ("pz-sky","pz_street","Little Underbank from the air, with Winter's clock","40% 50%")};
 /* V4 C8: your amenities, with walking times from the list below */
 const AMEN=`<div class="amen"><div class="amen-head"><div><span class="v4lab">Your amenities</span><h3 class="big-h">Everything you need, a short walk away.</h3></div><p class="lead">The Underbanks is under a minute away, St Joseph's Church is next door, and the bus interchange and park are an 8-minute walk.</p></div>
  <div class="amen-grid n3">${[["skunderbanks", "The Underbanks", "Under 1 min walk"], ["church", "St Joseph's Church", "Under 1 min walk"], ["t_inter", "Bus interchange and park", "8 min walk"]].map(([v,t,m])=>`<button style="background-image:var(--${v})" data-img="${v}" data-cap="${t}" aria-label="View ${t}"><span class="at"><b>${t}</b><span>${m}</span></span></button>`).join("")}</div></div>`;
 /* V4 C4 + C5: technical pages on warm off-white, floor plans and the grouped specification */
 function TECH(){
- const P=[["fb37", "Top-floor one bedroom apartment", "Example shown: 432.5 sq ft", [["Floor", "4th (top) floor of the main building"], ["Ceilings", "2.65m: the top floor is the only one that has them"], ["Light", "A large roof window that fills the living space with light"], ["Bedroom", "Faces the internal residents' garden"], ["Front door", "On the external gallery walkway"], ["In the numbers", "Our returns use this example one bed: 432.5 sq ft at £189,000"]]]];
+ const P=[["ph_plan_1b", "One bedroom apartment", "Example shown: Plot 21, first floor", [["Floor", "First floor of the main building"], ["Layout", "Open-plan kitchen and living, bedroom and bathroom"], ["Light", "A signature 8ft square window at the end of the living space"], ["Bedroom", "Faces the internal residents' garden"], ["Front door", "On the external gallery walkway"], ["In the numbers", "Our returns use an example one bed of 432.5 sq ft at £189,000"]]]];
  const G=[["Kitchen and living", [["Units", "Fully fitted, with an integrated dishwasher"], ["Appliances", "Built-in electric oven, ceramic hob and extractor"], ["Worktop", "Marble-effect quartz with a tiled splashback"], ["Lighting", "LED lighting under the cabinets"], ["Flooring", "Premium LVT"], ["Laundry", "Washer dryer plumbed into the service cupboard"]]], ["Bedroom", [["Flooring", "Plush sisal carpet"], ["Feature wall", "Black V-groove panelling behind the bed"], ["Lighting", "Matt black pendant lighting"], ["Electrics", "Black sockets and fixtures"], ["Doors", "Four-panel black wooden doors"], ["Joinery", "Architraves and skirting in dark heritage colours"]]], ["Bathroom", [["Shower", "Glass shower screen"], ["Fittings", "Matt black fixtures and fittings"], ["Sanitaryware", "Wall-hung toilet and basin"], ["Tiling", "Ceramic and porcelain tiles"], ["Heating", "Heated towel rail"], ["Storage", "Backlit mirrored cabinets"]]], ["The building", [["Garden", "A private landscaped residents' garden at the heart of the building"], ["Access", "Front doors on suspended walkways overlooking the garden"], ["Windows", "Signature 8ft square windows"], ["Bikes", "A secure bike store for every apartment"], ["Warranty", "10-year build warranty"]]], ["Tenure and running costs", [["Lease", "999 years"], ["Ground rent", "Nil"], ["Service charge", "£2.24 per sq ft per year"], ["Management", "10% of the rent, if we let it for you"], ["Exchange", "20% within 28 days"]]]];
  return `<div class="tech" id="plans"><div class="tech-head"><span class="v4lab">Technical pages</span><h3 class="tech-h">Plans and specification.</h3><p>A typical layout and the full specification, laid out so you can screenshot and share them.</p></div>
  ${P.map(([v,t,sz,rows],i)=>`<article class="plan"><button class="plan-img" style="background-image:var(--${v})" data-img="${v}" data-cap="${t}, typical layout" aria-label="View the ${t.toLowerCase()} plan full screen"></button>
