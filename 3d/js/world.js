@@ -3,7 +3,8 @@
 // Terrain heights are estimates relative to Charter House's ground floor (61.77 m AOD).
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { CG_PAVE, HV_PAVE } from './data.js?v=1795002000';
+import { CG_PAVE, HV_PAVE } from './data.js?v=1795002200';
+import { buildShopfronts } from './shopfronts.js?v=1795002200';
 
 // ------------------------------------------------------------------ terrain
 let TER = null, TH = null;
@@ -297,8 +298,12 @@ function addBuilding(Wl, roofsFlat, roofsSlate, chim, b, i, roofsLead = roofsFla
   let gMin = Infinity; for (const q of p) gMin = Math.min(gMin, groundAt(q[0], q[1]));
   const st = STYLE[b.s] ?? 3;
   const sd = hash(b.id + 0.37);
-  const tint = b.white || ((st === 2 || st === 3) && hash(b.id * 3.3) < 0.18) ? [2, 2, 2] : st === 5 ? [0.55, 0.6, 0.6] : BRICKS[Math.floor(hash(b.id * 1.7) * BRICKS.length)];
-  const H = Math.max(3, b.h);
+  const oldTown = c[0] < -60 && c[0] > -280 && c[1] > -80 && c[1] < 160;   // brick, not random white render, round Market Place and the Underbanks (Charlie, 18 Nov)
+  const tint = b.white || (!oldTown && (st === 2 || st === 3) && hash(b.id * 3.3) < 0.18) ? [2, 2, 2] : st === 5 ? [0.55, 0.6, 0.6] : BRICKS[Math.floor(hash(b.id * 1.7) * BRICKS.length)];
+  // per-building corrections from Charlie and the drone footage (OSM heights are rough)
+  //  12: the building between St Mary's Gate and the brewery is one storey with its roof as the second (Charlie, 18 Nov)
+  const FIX = { 12: { h: 3.5 } };
+  const H = Math.max(3, FIX[b.id]?.h ?? b.h);
   const yTop = gC + H, y0 = gMin - 1.2;
   // perimeter walls
   let per = 0; for (let k = 0; k < p.length; k++) { const a = p[k], q = p[(k + 1) % p.length]; per += Math.hypot(q[0] - a[0], q[1] - a[1]); }
@@ -329,11 +334,16 @@ function addBuilding(Wl, roofsFlat, roofsSlate, chim, b, i, roofsLead = roofsFla
     const P = (s, t, y) => [ob.c[0] + ux * s + vx * t, y, ob.c[1] + uz * s + vz * t];
     const A = ob.h0 + o, Bh = ob.h1 + o;
     const e1 = P(-A, -Bh, yTop - o * 0.78), e2 = P(A, -Bh, yTop - o * 0.78), r1 = P(-A, 0, yTop + rise), r2 = P(A, 0, yTop + rise), e3 = P(A, Bh, yTop - o * 0.78), e4 = P(-A, Bh, yTop - o * 0.78);
-    roofsSlate.push(e1, r1, r2, e1, r2, e2, e3, r2, r1, e3, r1, e4);
+    // every roof slope faces up and every gable end faces out, whichever way the plan's axes run (the roofs could be wound inwards and
+    // then only showed from inside: you saw through them from the street, Charlie 18 Nov)
+    const up = (t0, t1, t2) => { const ux = t1[0] - t0[0], uz = t1[2] - t0[2], vx = t2[0] - t0[0], vz = t2[2] - t0[2]; if (uz * vx - ux * vz < 0) roofsSlate.push(t0, t2, t1); else roofsSlate.push(t0, t1, t2); };
+    up(e1, r1, r2); up(e1, r2, e2); up(e3, r2, r1); up(e3, r1, e4);
     // gable ends (brick, no windows)
     const g1 = P(-ob.h0, -ob.h1, yTop), g2 = P(-ob.h0, ob.h1, yTop), g3 = P(-ob.h0, 0, yTop + rise);
     const g4 = P(ob.h0, ob.h1, yTop), g5 = P(ob.h0, -ob.h1, yTop), g6 = P(ob.h0, 0, yTop + rise);
-    Wl.tri(g1, g3, g2, gC, H, sd, tint); Wl.tri(g4, g6, g5, gC, H, sd, tint);
+    const out = (t0, t1, t2) => { const ax = t1[0] - t0[0], ay = t1[1] - t0[1], az = t1[2] - t0[2], bx = t2[0] - t0[0], by = t2[1] - t0[1], bz = t2[2] - t0[2];
+      const nx = ay * bz - az * by, nz = ax * by - ay * bx; if (nx * (t0[0] - ob.c[0]) + nz * (t0[2] - ob.c[1]) < 0) Wl.tri(t0, t2, t1, gC, H, sd, tint); else Wl.tri(t0, t1, t2, gC, H, sd, tint); };
+    out(g1, g3, g2); out(g4, g6, g5);
     // chimney stacks at the ridge ends
     if (st <= 2) for (const s of [-ob.h0 + 0.5, ob.h0 - 0.5]) {
       const cpos = P(s, 0, 0);
@@ -484,6 +494,7 @@ gWet = S.b;`)
   if (W.special.brewery) buildBrewery(M, W.special.brewery, Wl, roofsFlat, chim, group, W.special.brewery_bulk);
   const tm = townMaterial(M);
   const wm = new THREE.Mesh(Wl.geometry(), tm); wm.castShadow = true; wm.receiveShadow = true; wm.name = 'town_walls'; group.add(wm);
+  try { group.add(buildShopfronts(groundAt)); } catch (e) { console.warn('shop fronts', e); }   // painted shop fronts on the old town's streets (18 Nov)
   const worldUV = (g, sc) => { const p = g.attributes.position, uv = new Float32Array(p.count * 2); for (let i = 0; i < p.count; i++) { uv[i * 2] = p.getX(i) / sc; uv[i * 2 + 1] = p.getZ(i) / sc; } g.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); return g; };
   if (roofsFlat.length) {
     const g = worldUV(mergeGeometries(roofsFlat.map(x => { x = x.index ? x.toNonIndexed() : x; if (!x.attributes.color) x.setAttribute('color', new THREE.BufferAttribute(new Float32Array(x.attributes.position.count * 3).fill(0.75), 3)); return x; }), false), 8);
