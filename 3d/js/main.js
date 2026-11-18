@@ -9,31 +9,31 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { UNITS, FLOORS, STATUS, SITE, INTERIORS, SUN, fmtGBP, sqm, FLOOR_H, IS_PH, START_AREA, IS_OSL, IS_UBL, PLANF } from './site.js?v=1794998796';
-import { buildUBL } from './ublbuild.js?v=1794535000';
-import { buildUBLFitout } from './ublfit.js?v=1794535000';
-import { UBL_LEVELS } from './ubl_data.js?v=1794535000';
-import { buildPrintHouse, buildSeatonSign, buildSeatonHouse } from './printhouse.js?v=1794535000';
-import { buildOSL } from './oslbuild.js?v=1794535000';
-import { buildOSLFitout } from './oslfit.js?v=1794535000';
-import { makeMaterials, CUT, setAniso, tex } from './materials.js?v=1794535000';
-import { buildCharterHouse, buildFloorPlates } from './building.js?v=1794535000';
-import { buildContext, buildCourtyard, groundY, buildBreweryFront, buildCars, buildBrickWalls, buildParkingLots } from './context.js?v=1794535000';
-import { setTerrain, setMid, buildWorld, obb, groundAt, townUniforms, setGroundHole, insetPoly } from './world.js?v=1794535000';
-import { buildFar, hazeUniforms } from './far.js?v=1794535000';
-import { buildRailway } from './railway.js?v=1794535000';
-import { buildExchange, EXCHANGE_IDS } from './exchange.js?v=1794535000';
+import { UNITS, FLOORS, STATUS, SITE, INTERIORS, SUN, fmtGBP, sqm, FLOOR_H, IS_PH, START_AREA, IS_OSL, IS_UBL, PLANF } from './site.js?v=1795001500';
+import { buildUBL } from './ublbuild.js?v=1795001500';
+import { buildUBLFitout } from './ublfit.js?v=1795001500';
+import { UBL_LEVELS } from './ubl_data.js?v=1795001500';
+import { buildPrintHouse, buildSeatonSign, buildSeatonHouse } from './printhouse.js?v=1795001500';
+import { buildOSL } from './oslbuild.js?v=1795001500';
+import { buildOSLFitout } from './oslfit.js?v=1795001500';
+import { makeMaterials, CUT, setAniso, tex } from './materials.js?v=1795001500';
+import { buildCharterHouse, buildFloorPlates } from './building.js?v=1795001500';
+import { buildContext, buildCourtyard, groundY, buildBreweryFront, buildCars, buildBrickWalls, buildParkingLots } from './context.js?v=1795001500';
+import { setTerrain, setMid, buildWorld, obb, groundAt, townUniforms, setGroundHole, insetPoly } from './world.js?v=1795001500';
+import { buildFar, hazeUniforms } from './far.js?v=1795001500';
+import { buildRailway } from './railway.js?v=1795001500';
+import { buildExchange, EXCHANGE_IDS } from './exchange.js?v=1795001500';
 const TOUR_WORLD = new URLSearchParams(location.search).get('world') === 'tour';   // the wide world for the Stockport tour renders
-import { Forest, windUniforms } from './trees.js?v=1794535000';
-import { Interior } from './interior.js?v=1794535000';
-import { buildFurniture, LAYOUTS, furnitureMaterials } from './furniture.js?v=1794535000';
-import { buildPHFitout } from './phfit.js?v=1794535000';
-import { PH_PLAN, phSide } from './ph_data.js?v=1794535000';
-import { walkMaterials, buildApartment, Walker } from './walk.js?v=1794535000';
-import { landmarkMaterials, buildStMarys, buildMarketHallOSM, buildStJoseph } from './landmarks.js?v=1794747000';
-import { createTour } from './tour.js?v=1794535000';
-import { buildCrowd } from './crowd.js?v=1794535000';
-import { pitch as chPitch, phPitch, PICKS as CH_PICKS, PH_PICKS, PROOF, RESERVE, CHARLIE, AREA_CARDS as ALL_CARDS, REGEN, AREA_HEADLINE, rentFor, oslPitch, OSL_PICKS, OSL_PROOF, ublPitch, UBL_PICKS, UBL_PROOF } from './sales.js?v=1794535000';
+import { Forest, windUniforms } from './trees.js?v=1795001500';
+import { Interior } from './interior.js?v=1795001500';
+import { buildFurniture, LAYOUTS, furnitureMaterials } from './furniture.js?v=1795001500';
+import { buildPHFitout } from './phfit.js?v=1795001500';
+import { PH_PLAN, phSide } from './ph_data.js?v=1795001500';
+import { walkMaterials, buildApartment, Walker } from './walk.js?v=1795001500';
+import { landmarkMaterials, buildStMarys, buildMarketHallOSM, buildStJoseph } from './landmarks.js?v=1795001500';
+import { createTour } from './tour.js?v=1795001500';
+import { buildCrowd } from './crowd.js?v=1795001500';
+import { pitch as chPitch, phPitch, PICKS as CH_PICKS, PH_PICKS, PROOF, RESERVE, CHARLIE, AREA_CARDS as ALL_CARDS, REGEN, AREA_HEADLINE, rentFor, oslPitch, OSL_PICKS, OSL_PROOF, ublPitch, UBL_PICKS, UBL_PROOF } from './sales.js?v=1795001500';
 const pitch = IS_UBL ? ublPitch : IS_OSL ? oslPitch : IS_PH ? phPitch : chPitch, PICKS = IS_UBL ? UBL_PICKS : IS_OSL ? OSL_PICKS : IS_PH ? PH_PICKS : CH_PICKS;
 const RK = IS_UBL ? 'ubl' : IS_OSL ? 'osl' : IS_PH;   // which site's rents
 const PROOFS = IS_UBL ? UBL_PROOF : IS_OSL ? OSL_PROOF : PROOF;
@@ -1054,7 +1054,7 @@ function openPhoto(f) {
   let d = $('#photobox');
   if (!d) {
     d = document.createElement('div'); d.id = 'photobox'; d.setAttribute('role', 'dialog');
-    d.innerHTML = '<div class="pb-top"><img src="' + BASE + 'brand_charterhouse.png" alt="Charter House"><span class="pb-cap"></span><button class="pb-close" aria-label="Close">×</button></div><div class="pb-stage"><img class="pb-img" alt=""></div><div class="pb-hint">Scroll or pinch to zoom · drag to look round</div>';
+    d.innerHTML = '<div class="pb-top"><img src="' + BASE + (IS_PH ? 'brand_printhouse.png" alt="The Print House">' : 'brand_charterhouse.png" alt="Charter House">') + '<span class="pb-cap"></span><button class="pb-close" aria-label="Close">×</button></div><div class="pb-stage"><img class="pb-img" alt=""></div><div class="pb-hint">Scroll or pinch to zoom · drag to look round</div>';
     document.body.appendChild(d);
     const st = d.querySelector('.pb-stage'), im = d.querySelector('.pb-img'); let z = 1, tx = 0, ty = 0, drag = null;
     const apply = () => { im.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`; };
@@ -1415,7 +1415,7 @@ const LANDMARKS = IS_OSL ? [
   ["St Joseph's Primary School", [-74, 6, 170]], ["St Joseph's Church", [-128, 16, 207]],
 ] : [
   ['Churchgate', [-30, 0.6, -6.6]], ['Churchgate', [48, 1.2, 2]], ['Harvey Street', [-5.6, 0.4, 19]], ['Apsley Street', [24, 0.2, 52]],
-  ['Play park', [17, 6.5, -29]], ['Churchgate car park', [-24, 2.5, -27]], ['50–56 Churchgate', [30, 11.5, 5]], ["Residents' courtyard", [17, 3.5, 17]],
+  ['Play park', [17, 6.5, -29]], ['Churchgate car park', [-24, 2.5, -27]], ["Residents' courtyard", [17, 3.5, 17]],   // 50–56 Churchgate label removed (Charlie, 18 Nov)
 ];
 const lmEls = LANDMARKS.map(([t, p]) => { const el = document.createElement('div'); el.className = 'ltag'; el.textContent = t; $('#labels').appendChild(el); return { el, name: t, p: new THREE.Vector3(...p) }; });
 const CARD_BY_ID = new Map();
@@ -1779,7 +1779,9 @@ function applyViewOffset() {
 }
 function onResize() {
   const w = innerWidth, h = innerHeight;
-  camera.aspect = w / h; if (S.mode !== 'view') camera.fov = baseFov(); applyViewOffset(); camera.updateProjectionMatrix();
+  // a 360 and the walk-through keep their own wide view: resetting it here zoomed a 360 right in with no way back (Charlie, 18 Nov),
+  // and the quality step below resizes too, so it happened on its own
+  camera.aspect = w / h; if (S.mode === 'tour') camera.fov = tour.st.fov; else if (!['view', 'walk', 'entering', 'leaving', 'inside'].includes(S.mode)) camera.fov = baseFov(); applyViewOffset(); camera.updateProjectionMatrix();
   renderer.setSize(w, h, false); composer.setSize(w, h);
   if (gtao) gtao.setSize(w, h);
   bloom.setSize(w, h);
@@ -1933,23 +1935,33 @@ function updateLabels() {
 
 // ------------------------------------------------------------------ adaptive quality
 // Watches the real frame time and steps quality down (then gently back up) to stay smooth on any device.
-let curDPR = DPR, adaptAcc = 0, adaptN = 0, adaptCool = 0, gtaoTried = false;
+let curDPR = DPR, adaptCool = 0, gtaoTried = false, adaptFrom = 0, slowRun = 0, goodRun = 0, upNeed = 3;
+const adaptBuf = [];
 const minDPR = Math.min(DPR, 1.15);   // never drop to a blurry picture
 function setDPR(d) { curDPR = d; renderer.setPixelRatio(d); composer.setPixelRatio(d); onResize(); }
+// Charlie, 18 Nov: the model sometimes opened blurry and stayed blurry until a reload. The first seconds are slow while shaders and
+// textures load, which dropped the sharpness; it only came back above 77 frames a second, which a normal 60 Hz screen never shows.
+// Now: wait 8 s after the model appears, judge on the middle frame of each batch (one hitch from a picture loading does not count),
+// drop only after two slow batches in a row, and step back up whenever the view runs smooth at the screen's own rate.
 function adapt(rawDt) {
   if (!CH || S.mode === 'inside' || document.hidden || rawDt > 0.5) return;
-  adaptAcc += rawDt; adaptN++;
-  if (adaptN < 24) return;
-  const ms = adaptAcc / adaptN * 1000; adaptAcc = 0; adaptN = 0;
+  const now = performance.now();
+  if (!adaptFrom) adaptFrom = now + 8000;
+  if (now < adaptFrom) return;
+  adaptBuf.push(rawDt); if (adaptBuf.length < 30) return;
+  const ms = adaptBuf.sort((a, b) => a - b)[15] * 1000; adaptBuf.length = 0;
   if (adaptCool-- > 0) return;
-  if (ms > 45 && curDPR > 1) { if (gtao) gtao.enabled = false; bloom.enabled = false; setDPR(1); adaptCool = 1; return; }
-  if (ms > 28) {
+  const slow = ms > 28; slowRun = slow ? slowRun + 1 : 0;
+  if (ms < 20) goodRun++; else goodRun = 0;
+  if (slow && slowRun < 2) return;
+  if (ms > 45 && curDPR > 1) { if (gtao) gtao.enabled = false; bloom.enabled = false; setDPR(1); adaptCool = 1; slowRun = 0; upNeed = Math.min(upNeed * 2, 40); return; }
+  if (slow) {
     if (gtao && gtao.enabled) { gtao.enabled = false; }
-    else if (curDPR > minDPR + 0.01) setDPR(Math.max(minDPR, curDPR * 0.8));
+    else if (curDPR > minDPR + 0.01) { setDPR(Math.max(minDPR, curDPR * 0.8)); upNeed = Math.min(upNeed * 2, 40); }
     else if (sun.shadow.mapSize.x > 1024) { sun.shadow.mapSize.set(1024, 1024); sun.shadow.map?.dispose(); sun.shadow.map = null; }
     else if (bloom.enabled && Q !== 'low') bloom.enabled = false;
-    adaptCool = 1;
-  } else if (ms < 13 && curDPR < DPR - 0.01) { setDPR(Math.min(DPR, curDPR * 1.15)); adaptCool = 3; }
+    adaptCool = 1; slowRun = 0;
+  } else if (goodRun >= upNeed && curDPR < DPR - 0.01) { setDPR(Math.min(DPR, Math.max(minDPR, curDPR * 1.25))); goodRun = 0; adaptCool = 2; }
   else if (ms < ((S.mode === 'floor' || S.mode === 'unit') ? 20 : 11) && gtao && !gtao.enabled && !gtaoTried) { gtao.enabled = true; gtaoTried = true; adaptCool = 2; }   // contact shadows in the cut-away whenever there is headroom
 }
 
@@ -2085,8 +2097,7 @@ function buildSpots() {
       { id: 'walkway', name: 'Top-floor walkway', at: V3(20.2, 3 * F + 1.65, 11.8), look: V3(12.5, 3 * F + 1.3, 11.9), note: 'Townhouse-style front doors off an open walkway, not a hotel corridor.', glide: false },
       { id: 'church', name: 'Down Churchgate from St Mary’s', at: eyeAt(-95, -7.4), look: V3(8, 7, 2), note: 'Stockport’s oldest church behind you, Charter House at the end of the street.', glide: false },
       { id: 'market', name: 'Market Place', at: eyeAt(-127, -13), look: V3(-152, 5.5, -9), note: 'The 1861 Market Hall, two minutes’ walk from your front door.', glide: false },
-      { id: 'roof', name: 'Above the roof', at: V3(10, 31, -5), look: V3(-60, 12, -14), note: 'Drag round: St Mary’s, the Market Hall, the viaduct and the hills.', glide: false },
-    ];
+    ];   // 'Above the roof' removed (Charlie, 18 Nov)
   }
   // photoreal path-traced 360s of the rooms (rendered offline from this model; listed in assets/pano/index.json)
   for (const p of PANO_INDEX) {
@@ -2282,7 +2293,7 @@ function updateTourPins() {
     const cur = SPOTS[T.spot];
     const vis = (!panoOn || (cur && cur.plot == null)) && !busy && cur && cur.links.includes(sp.id) && T.door == null && d < 95 && d > 3 && tmpV.z < 1 && Math.abs(tmpV.x) < 1 && tmpV.y > -0.62 && tmpV.y < 0.9;
     el.style.opacity = vis ? 1 : 0; el.style.pointerEvents = vis ? 'auto' : 'none';
-    if (vis) { el.style.transform = `translate(${(tmpV.x + 1) / 2 * w}px, ${(1 - tmpV.y) / 2 * h}px) translate(-50%, -100%) scale(${THREE.MathUtils.clamp(14 / d, 0.62, 1.15)})`; }
+    if (vis) { el.style.transform = `translate(${(tmpV.x + 1) / 2 * w}px, ${(1 - tmpV.y) / 2 * h}px) translate(-50%, -100%) scale(${THREE.MathUtils.clamp(14 / d, 0.82, 1.2)})`; }
   }
   // the windows of a photoreal 360: a pin on each, which opens the real view out of that window
   const sp = SPOTS[T.spot], wins = panoOn && !busy && sp && sp.pano && sp.plot != null ? panoWindows(sp) : [];
@@ -2343,6 +2354,7 @@ $('#vw-360').onclick = () => { if (S.mode === 'view') closeView(); };
   const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
   if (req && exit) {
     $('#btn-fs').hidden = false; document.body.classList.add('has-fs');
+    { const pad = $('#navpad'), fs = $('#btn-fs'); if (pad && fs) { pad.prepend(fs); const tip = document.createElement('span'); tip.id = 'fs-tip'; tip.textContent = 'Full screen'; tip.onclick = () => fs.click(); pad.appendChild(tip); setTimeout(() => tip.classList.add('gone'), 12000); } }
     $('#btn-fs').onclick = () => { try { const r = isFs() ? exit.call(document) : req.call(de, { navigationUI: 'hide' }); if (r && r.catch) r.catch(() => {}); } catch (e) {} };
     const sync = () => { document.body.classList.toggle('is-fs', isFs()); $('#btn-fs').setAttribute('aria-label', isFs() ? 'Exit full screen' : 'Full screen'); $('#btn-fs').title = isFs() ? 'Exit full screen' : 'Full screen (hides the browser bar)'; setTimeout(() => dispatchEvent(new Event('resize')), 120); };
     document.addEventListener('fullscreenchange', sync); document.addEventListener('webkitfullscreenchange', sync);
@@ -2484,7 +2496,7 @@ function loop() {
   try {
     await build();
     placeLandmarks();
-    try { const j = await fetch(BASE + 'pano/index.json?v=1794780000').then(r => r.ok ? r.json() : []); PANO_INDEX = (j || []).filter(p => !!p.type === true && (IS_UBL ? p.site === 'ubl' : IS_OSL ? p.site === 'osl' : IS_PH ? p.site === 'ph' : p.site !== 'ph' && p.site !== 'osl' && p.site !== 'ubl')); } catch (e) { PANO_INDEX = []; }
+    try { const j = await fetch(BASE + 'pano/index.json?v=1795000000').then(r => r.ok ? r.json() : []); PANO_INDEX = (j || []).filter(p => !!p.type === true && (IS_UBL ? p.site === 'ubl' : IS_OSL ? p.site === 'osl' : IS_PH ? p.site === 'ph' : p.site !== 'ph' && p.site !== 'osl' && p.site !== 'ubl')); } catch (e) { PANO_INDEX = []; }
     buildSpots();
   } catch (e) { console.error(e); lmsg.textContent = 'Something went wrong loading the model. Please refresh.'; return; }
   applyTOD('day');
@@ -2558,6 +2570,27 @@ function waitForTextures() {
 
 // expose for testing
 window.__CH = { getApartment, UNITS, floorView, SY: () => SY(), FH, crowdRef: () => crowd, showPano, setBuild, openBuild, closeBuild, goSpot, walkToDoor, exitTour, tour, SPOTS: () => SPOTS, toggleArea, flyToCard, setClay, CARD_BY_ID, showCard, farRef: () => farGroup, composer, walker, aptRef: () => apt, goView, forest, CHref: () => CH, ctxRef: () => contextGroup, worldRef: () => worldGroup, PLACES, groundAt, playFilm, endFilm, THREE, M, updateReflections, getRefl: () => reflRT, furniture: () => furniture, unitTagsRef: () => unitTags, jump: (p, t) => { flight = null; camera.position.set(...p); controls.target.set(...t); controls.enabled = true; camera.lookAt(controls.target); controls.update(); }, frames: (n) => { stillFrames = n; }, perf: () => renderer.info.render, S, T, panoOn: () => panoOn, toFloor, toUnit, toExplore, stepInside, seeView, applyTOD, camera, controls, scene, renderer, closeInterior, closeView, CUT, flyTo };
+// Charter House and The Print House (18 Nov, Charlie): the right-hand panel no longer sits open on the building and floor views; it opens
+// only for a flat (its plan, price and the View from the window / Step inside buttons). The panel toggle tab goes with it.
+if (EDITION === 'ch' || EDITION === 'ph') {
+  const P = $('#panel');
+  let was = '';
+  const keep = () => {
+    const unit = S.mode === 'unit' || ['view', 'inside', 'walk'].includes(S.mode);
+    document.body.classList.toggle('nopanel', !unit);
+    if (!unit && !P.classList.contains('hide')) { P.classList.add('hide'); try { applyViewOffset(); } catch (e) {} }
+    if (S.mode === 'unit' && was !== 'unit' && P.classList.contains('hide')) { P.classList.remove('hide'); try { applyViewOffset(); } catch (e) {} }   // a flat just opened: show its panel once
+    was = S.mode;
+  };
+  // with the floor panel gone, the photoreal cut-away of a floor opens from a brass button at the foot of the screen
+  const fp = document.createElement('button'); fp.id = 'fp-btn'; fp.type = 'button'; fp.hidden = true;
+  fp.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg><span></span>';
+  fp.onclick = () => { if (S.mode === 'floor' && FLOOR_PHOTO[S.floor]) openPhoto(S.floor); };
+  document.body.appendChild(fp);
+  const fpSync = () => { const on = S.mode === 'floor' && S.floor != null && !!FLOOR_PHOTO[S.floor] && !S.area; fp.hidden = !on; if (on) fp.querySelector('span').textContent = 'See the photoreal cut-away'; };
+  new MutationObserver(keep).observe(P, { attributes: true, attributeFilter: ['class'], childList: true });
+  setInterval(() => { keep(); fpSync(); }, 400);
+}
 // call mode: live on the Charter House link from 18 Nov 2026 (Charlie), started from the phone button by Home; ?call and /call still load it
 // on the other editions. A failure there never touches the rest of the page.
-if (EDITION === 'ch' || /[?&]call\b/.test(location.search) || /\/call\/?$/.test(location.pathname)) import('./callmode.js?v=1794998796').then((m) => m.init(window.__CH)).catch((e) => console.warn('call mode', e));
+if (EDITION === 'ch' || /[?&]call\b/.test(location.search) || /\/call\/?$/.test(location.pathname)) import('./callmode.js?v=1795001500').then((m) => m.init(window.__CH)).catch((e) => console.warn('call mode', e));
