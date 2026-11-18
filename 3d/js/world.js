@@ -3,23 +3,27 @@
 // Terrain heights are estimates relative to Charter House's ground floor (61.77 m AOD).
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { CG_PAVE, HV_PAVE } from './data.js?v=1795001500';
+import { CG_PAVE, HV_PAVE } from './data.js?v=1795002000';
 
 // ------------------------------------------------------------------ terrain
 let TER = null, TH = null;
 export function setTerrain(t, raw = false) {
   TER = t; TH = new Float32Array(t.h.length); for (let i = 0; i < t.h.length; i++) TH[i] = t.h[i] / 10;
   if (raw) return;   // another town (Hyde): no Stockport street corrections
+  // the ground is now the Environment Agency's 1 m LiDAR (Charlie, 18 Nov: true levels for the Underbanks, Market Place, Hillgate
+  // and the Print House streets), so the two guessed Churchgate slopes below are not needed; the architect's levels round
+  // Charter House itself (Churchgate and Harvey Street pavements, the play park) still apply
+  const lidar = t.src === 'lidar';
   // local knowledge: Churchgate runs gently DOWNHILL from Charter House to St Mary's and the Market Place (the estimated grid had it rising)
   const sm = (v) => { v = Math.max(0, Math.min(1, v)); return v * v * (3 - 2 * v); };
-  for (let j = 0; j < t.nz; j++) for (let i = 0; i < t.nx; i++) {
+  if (!lidar) for (let j = 0; j < t.nz; j++) for (let i = 0; i < t.nx; i++) {
     const x = t.x0 + i * t.cell, z = t.z0 + j * t.cell;
     const w = sm((10 - x) / 40) * (1 - sm((-260 - x) / 100)) * (1 - sm((Math.abs(z + 10) - 110) / 90));
     if (w > 0) TH[j * t.nx + i] -= w * 0.08 * Math.min(110, Math.max(0, 10 - x));
   }
   // St Mary's Gate stretch (Charlie, 6 Nov): Churchgate falls at an even, gentle 3% from Charter House towards St Mary's and
   // the Market Place instead of rolling up and down, and St Mary's Gate stands on that even slope
-  for (let j = 0; j < t.nz; j++) for (let i = 0; i < t.nx; i++) {
+  if (!lidar) for (let j = 0; j < t.nz; j++) for (let i = 0; i < t.nx; i++) {
     const x = t.x0 + i * t.cell, z = t.z0 + j * t.cell;
     const w3 = sm((6 - x) / 8) * (1 - sm((-150 - x) / 40)) * (1 - sm((Math.abs(z - 3) - 18) / 12));
     if (w3 > 0) { const T = -0.03 - 0.03 * Math.max(0, 4 - x); TH[j * t.nx + i] = TH[j * t.nx + i] * (1 - w3) + T * w3; }
@@ -306,7 +310,20 @@ function addBuilding(Wl, roofsFlat, roofsSlate, chim, b, i, roofsLead = roofsFla
   // roof
   const ob = obb(p);
   const rect = Math.abs(polyArea(p)) / (4 * ob.h0 * ob.h1);
-  if (b.r === 'gable' && rect > 0.85 && ob.h1 < 9) {
+  // two pitched roofs side by side, ridges along the long side (a single-storey works or warehouse, Charlie 18 Nov)
+  if (b.r === 'twin' && rect > 0.6) {
+    const [ux, uz] = ob.u, vx = -uz, vz = ux, o = 0.25, hw = ob.h1 / 2, rise = hw * 0.62;
+    const P = (s, t, y) => [ob.c[0] + ux * s + vx * t, y, ob.c[1] + uz * s + vz * t];
+    const up = (t0, t1, t2) => { const ax = t1[0] - t0[0], az = t1[2] - t0[2], bx = t2[0] - t0[0], bz = t2[2] - t0[2]; if (az * bx - ax * bz < 0) roofsSlate.push(t0, t2, t1); else roofsSlate.push(t0, t1, t2); };
+    const out = (t0, t1, t2) => { const ax = t1[0] - t0[0], ay = t1[1] - t0[1], az = t1[2] - t0[2], bx = t2[0] - t0[0], by = t2[1] - t0[1], bz = t2[2] - t0[2];
+      const nx = ay * bz - az * by, nz = ax * by - ay * bx; if (nx * (t0[0] - ob.c[0]) + nz * (t0[2] - ob.c[1]) < 0) Wl.tri(t0, t2, t1, gC, H, sd, tint); else Wl.tri(t0, t1, t2, gC, H, sd, tint); };
+    for (const sg of [-1, 1]) {
+      const tc = sg * hw, A = ob.h0 + o;
+      const e1 = P(-A, tc - hw - (sg < 0 ? o : 0), yTop), e2 = P(A, tc - hw - (sg < 0 ? o : 0), yTop), r1 = P(-A, tc, yTop + rise), r2 = P(A, tc, yTop + rise), e3 = P(A, tc + hw + (sg > 0 ? o : 0), yTop), e4 = P(-A, tc + hw + (sg > 0 ? o : 0), yTop);
+      up(e1, r1, r2); up(e1, r2, e2); up(e3, r2, r1); up(e3, r1, e4);
+      for (const s0 of [-ob.h0, ob.h0]) out(P(s0, tc - hw, yTop), P(s0, tc, yTop + rise), P(s0, tc + hw, yTop));   // the gable ends
+    }
+  } else if (b.r === 'gable' && rect > 0.85 && ob.h1 < 9) {
     const [ux, uz] = ob.u, vx = -uz, vz = ux, o = 0.28;
     const rise = ob.h1 * 0.78;
     const P = (s, t, y) => [ob.c[0] + ux * s + vx * t, y, ob.c[1] + uz * s + vz * t];
@@ -460,6 +477,9 @@ gWet = S.b;`)
   // ---- buildings
   const Wl = new Wall(), roofsFlat = [], roofsSlate = [], roofsLead = [], chim = [];
   for (const id of (opts.white || [])) { const b = W.bld.find(q => q.id === id); if (b) b.white = true; }
+  // round the Print House the grey flat roofs become slate (Charlie, 18 Nov: "nothing's built like that with a really grey flat
+  // roof"); sheds, canopies and the big works roofs stay flat
+  if (opts.slateNear) { const [cx, cz, rr] = opts.slateNear; for (const b of W.bld) { if (b.r !== 'flat' || ['shed', 'canopy', 'works'].includes(b.s)) continue; let x = 0, z = 0; for (const q of b.p) { x += q[0]; z += q[1]; } x /= b.p.length; z /= b.p.length; if (Math.hypot(x - cx, z - cz) < rr && Math.abs(polyArea(b.p)) < 2600) b.r = 'gable'; } }
   W.bld.forEach((b, i) => addBuilding(Wl, roofsFlat, roofsSlate, chim, b, i, roofsLead));
   if (W.special.brewery) buildBrewery(M, W.special.brewery, Wl, roofsFlat, chim, group, W.special.brewery_bulk);
   const tm = townMaterial(M);

@@ -53,7 +53,8 @@ const P_ = PH_PLAN, sideFp = (t0, t1) => { const c = [[0, t0], [P_.SIDE.S, t0], 
 const SLOTS = [
   { type: '1A', fp: sideFp(P_.SIDE.PW, P_.SIDE.T), fpS: [0, P_.SIDE.PW, P_.SIDE.S, P_.SIDE.T], facing: 'Fletcher Street', side: true },
   { type: '1A', fp: sideFp(0, P_.SIDE.PW), fpS: [0, 0, P_.SIDE.S, P_.SIDE.PW], facing: 'Fletcher Street', side: true },
-  { type: '2A', fp: [P_.PW[4], 0, P_.UW, P_.D], facing: 'St Joseph’s Church', corner: true },
+  { type: '2A', fp: [P_.PW[4], 0, P_.UW, P_.D], facing: 'St Joseph’s Church', corner: true,   // the flat's real outline: the wing in, the plant room corner out
+    polyPlan: [[P_.PW[4], 0], [P_.UW, 0], [P_.UW, P_.WING[1]], [P_.WING[2], P_.WING[1]], [P_.WING[2], P_.WING[3]], [P_.PW[4] + 4.0, P_.WING[3]], [P_.PW[4] + 4.0, P_.D], [P_.PW[4], P_.D]] },
   { type: '1B', fp: [P_.PW[3], 0, P_.PW[4], P_.D], facing: 'St Joseph’s Church' },
   { type: '1B', fp: [P_.PW[2], 0, P_.PW[3], P_.D], facing: 'St Joseph’s Church' },
   { type: '1B', fp: [P_.PW[1], 0, P_.PW[2], P_.D], facing: 'St Joseph’s Church' },
@@ -75,6 +76,7 @@ export const PH_UNITS = SF.map(([plot, fl, beds, sqft, price, status]) => {
     : 'Kitchen-living looks out to St Joseph’s Church; bedroom and front door over the residents’ garden';
   return { plot, apt: `${PH_FLOORS[floor].short}.${String(k + 1).padStart(2, '0')}`, floor, type: s.type, beds, sqft: Math.round(sqft), price, status, note, view, fp: s.fp.slice(), fpS: s.fpS ? s.fpS.slice() : null, slot: k, side: !!s.side,
     // the side block's flats are turned to the main block: their outline in model x, z (x = u, z = -v) for the floor tags and glow
+    ...(s.polyPlan ? { poly: s.polyPlan.map(([a, b]) => [a, -b]) } : {}),
     ...(s.fpS ? { poly: [[s.fpS[0], s.fpS[1]], [s.fpS[2], s.fpS[1]], [s.fpS[2], s.fpS[3]], [s.fpS[0], s.fpS[3]]].map(([a, b]) => { const [uu, vv] = phSide(a, b); return [uu, -vv]; }) } : {}) };
 });
 
